@@ -1,11 +1,21 @@
 "use client"
 
-import { ArrowLeft, Star, TrendingUp, Zap, AlertTriangle, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react"
+import {
+  ArrowLeft,
+  Star,
+  TrendingUp,
+  Zap,
+  AlertTriangle,
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  Camera,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import { walletData } from "@/data/wallets"
+import { Footer } from "@/components/footer"
 import Image from "next/image"
 
 interface Wallet {
@@ -31,15 +41,14 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
   const previousWallet = walletData[currentIndex - 1]
   const nextWallet = walletData[currentIndex + 1]
 
-  const getScoreBadgeColor = (score: number, isIssues = false) => {
+  const getScoreColor = (score: number, isIssues = false) => {
     if (isIssues) {
-      if (score <= 3) return "bg-green-500/20 text-green-400 border-green-500/30"
-      if (score <= 6) return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
-      return "bg-red-500/20 text-red-400 border-red-500/30"
+      if (score === 0) return "text-white"
+      return "text-red-400"
     }
-    if (score >= 4.5) return "bg-green-500/20 text-green-400 border-green-500/30"
-    if (score >= 3.5) return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
-    return "bg-red-500/20 text-red-400 border-red-500/30"
+    if (score >= 4.5) return "text-green-400"
+    if (score >= 3.5) return "text-yellow-400"
+    return "text-red-400"
   }
 
   const navigateToWallet = (walletName: string) => {
@@ -142,9 +151,8 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between">
-                <span className="text-3xl font-bold">{wallet.onboarding}</span>
-                <Badge className={getScoreBadgeColor(wallet.onboarding)}>{wallet.onboarding}/5</Badge>
+              <div className="flex items-center">
+                <span className={`text-5xl font-bold ${getScoreColor(wallet.onboarding)}`}>{wallet.onboarding}</span>
               </div>
             </CardContent>
           </Card>
@@ -157,9 +165,8 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between">
-                <span className="text-3xl font-bold">{wallet.uiDesign}</span>
-                <Badge className={getScoreBadgeColor(wallet.uiDesign)}>{wallet.uiDesign}/5</Badge>
+              <div className="flex items-center">
+                <span className={`text-5xl font-bold ${getScoreColor(wallet.uiDesign)}`}>{wallet.uiDesign}</span>
               </div>
             </CardContent>
           </Card>
@@ -172,9 +179,8 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between">
-                <span className="text-3xl font-bold text-red-400">{wallet.uxIssues}</span>
-                <Badge className="bg-red-500/20 text-red-400 border-red-500/30">{wallet.uxIssues} issues</Badge>
+              <div className="flex items-center">
+                <span className={`text-5xl font-bold ${getScoreColor(wallet.uxIssues, true)}`}>{wallet.uxIssues}</span>
               </div>
             </CardContent>
           </Card>
@@ -252,6 +258,21 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
           </Card>
         )}
 
+        {/* Screenshots */}
+        <Card className="bg-[#0f0f0f] mb-12">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Camera className="h-6 w-6 text-blue-400" />
+              Screenshots
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <p className="text-gray-500">No screenshots available yet.</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Back Button */}
         <div className="text-center">
           <Button onClick={() => router.push("/")} className="bg-white text-black hover:bg-gray-200 px-8 py-3">
@@ -259,6 +280,8 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
           </Button>
         </div>
       </main>
+
+      <Footer />
     </div>
   )
 }
