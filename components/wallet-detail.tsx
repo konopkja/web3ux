@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import { walletData } from "@/data/wallets"
 import { Footer } from "@/components/footer"
+import { ImageGallery } from "@/components/image-gallery"
 import Image from "next/image"
 
 interface Wallet {
@@ -57,6 +58,41 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
   }
 
   const overallScore = ((wallet.onboarding + wallet.uiDesign - wallet.uxIssues / 2) / 2).toFixed(1)
+
+  // 1inch wallet screenshots
+  const inchScreenshots =
+    wallet.name === "1inch"
+      ? [
+          {
+            src: "/screenshots/1inch-home.png",
+            alt: "1inch wallet home screen",
+            description:
+              "Home screen with 'Stories' section that is overwhelming with too many uninteresting shorts inside.",
+          },
+          {
+            src: "/screenshots/1inch-send.png",
+            alt: "1inch wallet send screen",
+            description:
+              "Send transaction screen with jargon that could be easily removed by using simpler terms like 'Transaction Fee'.",
+          },
+          {
+            src: "/screenshots/1inch-token.png",
+            alt: "1inch wallet token details",
+            description: "Token details screen showing Ether not being tracked, which doesn't seem right.",
+          },
+          {
+            src: "/screenshots/1inch-receive.png",
+            alt: "1inch wallet receive screen",
+            description:
+              "Receive screen missing description & guidance for beginners, especially for those not used to QR codes.",
+          },
+          {
+            src: "/screenshots/1inch-success.png",
+            alt: "1inch wallet success screen",
+            description: "Success screen where only 'Congratulations' should be bold for better visual hierarchy.",
+          },
+        ]
+      : []
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -267,9 +303,11 @@ export default function WalletDetail({ wallet }: WalletDetailProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4">
+            {wallet.name === "1inch" && inchScreenshots.length > 0 ? (
+              <ImageGallery images={inchScreenshots} />
+            ) : (
               <p className="text-gray-500">No screenshots available yet.</p>
-            </div>
+            )}
           </CardContent>
         </Card>
 
